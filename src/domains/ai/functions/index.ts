@@ -4,7 +4,7 @@ import { Constants } from "../../../../constants";
 
 const botInstructions: string = Constants.BOT_INSTRUCTIONS;
 
-export const promptGenerator = (question) => {
+export const promptGenerator = (question: string) => {
   return botInstructions + question;
 };
 
