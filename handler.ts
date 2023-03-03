@@ -1,6 +1,6 @@
-import {promptGenerator} from "./src/domains/ai/functions";
-import {sendAIQuestion} from "./src/domains/ai/functions";
-import {Constants} from "./constants";
+import { promptGenerator } from "./src/domains/ai/functions";
+import { sendAIQuestion } from "./src/domains/ai/functions";
+import { Constants } from "./constants";
 
 const modelConfig = Constants.OPENAI_MODEL_CONFIG;
 
@@ -16,10 +16,10 @@ export async function analyser(event) {
 
   try {
     const completionText = await sendAIQuestion({
-        model: modelConfig.model,
-        prompt: prompt,
-        temperature: modelConfig.temperature,
-        max_tokens: modelConfig.max_tokens,
+      model: modelConfig.model,
+      prompt: prompt,
+      temperature: modelConfig.temperature,
+      max_tokens: modelConfig.max_tokens,
     });
 
     return {
@@ -35,4 +35,3 @@ export async function analyser(event) {
     };
   }
 }
-
