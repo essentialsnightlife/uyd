@@ -21,4 +21,4 @@ jobs:
             - .yarn/unplugged
       - run:
           name: Run tests
-          command: jest
+          command: yarn test
