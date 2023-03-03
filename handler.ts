@@ -1,35 +1,36 @@
-import { OpenAIApi } from "openai";
-import {config, model} from "./src/domains/ai/config";
 import {promptGenerator} from "./src/domains/ai/functions";
+import {sendAIQuestion} from "./src/domains/ai/functions";
+import {Constants} from "./constants";
 
-const openai = new OpenAIApi(config);
+const modelConfig = Constants.OPENAI_MODEL_CONFIG;
 
 export async function analyser(event) {
-  if (!(event.queryStringParameters.question)) {
+  const prompt = promptGenerator(event.queryStringParameters.question);
+
+  if (!(event.queryStringParameters || event.queryStringParameters.question)) {
     return {
       message: { result: "No question provided" },
       input: event,
     };
   }
 
-  const prompt = promptGenerator(event.queryStringParameters.question);
-
   try {
-    const completion = await openai.createCompletion({
-      model: model,
-      prompt: prompt,
-      temperature: 0,
-      max_tokens: 250,
+    const completionText = await sendAIQuestion({
+        model: modelConfig.model,
+        prompt: prompt,
+        temperature: modelConfig.temperature,
+        max_tokens: modelConfig.max_tokens,
     });
 
     return {
-      body: { result: completion.data.choices[0].text },
+      body: { result: completionText },
       input: event,
     };
   } catch (error) {
     console.log(error);
+
     return {
-      body: JSON.stringify({ error: error.message }),
+      body: { error: error.message },
       input: event,
     };
   }

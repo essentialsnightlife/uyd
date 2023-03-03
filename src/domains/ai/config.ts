@@ -5,7 +5,5 @@ export const config  = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const botInstructions = Constants.BOT_INSTRUCTIONS;
-
-export const model = Constants.MODEL;
+export const botInstructions: string = Constants.BOT_INSTRUCTIONS;
 
