@@ -4,10 +4,16 @@ import {promptGenerator} from "./src/domains/ai/functions";
 
 const openai = new OpenAIApi(config);
 
-const testQuestion = "what is a lucid dream?"
-const prompt = promptGenerator(testQuestion);
-
 export async function analyser(event) {
+  if (!(event.queryStringParameters.question)) {
+    return {
+      message: { result: "No question provided" },
+      input: event,
+    };
+  }
+
+  const prompt = promptGenerator(event.queryStringParameters.question);
+
   try {
     const completion = await openai.createCompletion({
       model: model,
