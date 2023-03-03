@@ -1,13 +1,17 @@
-service: aws-node-typescript # NOTE: update this with your service name
+service: uyd
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
+  region: ${file(./conf/serverless.yml):AWS_REGION}
+  environment:
+    OPENAI_API_KEY: ${file(./conf/serverless.yml):OPENAI_API_KEY}
 
 functions:
-  hello:
-    handler: handler.hello
+  dream-analyser:
+    handler: handler.analyser
 
 plugins:
   - serverless-esbuild
