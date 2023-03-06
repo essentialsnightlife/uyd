@@ -39,11 +39,11 @@ export async function analyser(event) {
 
 const dbClient = new DynamoDBClient({ region: "eu-west-2" });
 const TableName = process.env.TABLE_NAME;
-export async function createBotResponse(event) {
-  const newBotResponse = {
+export async function createDreamsObject(event) {
+  const newDreamObject = {
     id: { S: event.body.id },
     userId: { S: event.body.userId },
-    query: { N: event.body.query },
+    query: { S: event.body.query },
     response: { S: event.body.response },
   };
 
@@ -51,11 +51,11 @@ export async function createBotResponse(event) {
     await dbClient.send(
       new PutItemCommand({
         TableName: TableName,
-        Item: newBotResponse,
+        Item: newDreamObject,
       })
     );
 
-    return { statusCode: 200, body: JSON.stringify(newBotResponse) };
+    return { statusCode: 200, body: JSON.stringify(newDreamObject) };
   } catch (error) {
     console.log(error);
 
