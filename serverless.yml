@@ -6,18 +6,20 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: ${file(./conf/serverless.yml):AWS_REGION}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        - "Fn::GetAtt": [ dreamsTable, Arn ]
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+                - dynamodb:Query
+                - dynamodb:DescribeTable
+                - dynamodb:Scan
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+          Resource:
+            - "Fn::GetAtt": [ dreamsTable, Arn ]
   environment:
     TABLE_NAME:
       Ref: dreamsTable
