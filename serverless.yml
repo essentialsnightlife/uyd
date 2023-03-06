@@ -6,12 +6,50 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: ${file(./conf/serverless.yml):AWS_REGION}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+                - dynamodb:Query
+                - dynamodb:DescribeTable
+                - dynamodb:Scan
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+          Resource:
+            - "Fn::GetAtt": [ analysedDreams, Arn ]
   environment:
+    TABLE_NAME:
+      Ref: analysedDreams
     OPENAI_API_KEY: ${file(./conf/serverless.yml):OPENAI_API_KEY}
 
 functions:
   dream-analyser:
-    handler: handler.analyser
+    handler: src/domains/ai/functions/handler.analyser
+  analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.create
+    events:
+      - httpApi:
+          path: /dreams
+          method: POST
 
 plugins:
   - serverless-esbuild
+
+resources:
+  Resources:
+    analysedDreams:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: analysedDreams
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
