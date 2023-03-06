@@ -19,17 +19,17 @@ provider:
                 - dynamodb:UpdateItem
                 - dynamodb:DeleteItem
           Resource:
-            - "Fn::GetAtt": [ dreamsStorage, Arn ]
+            - "Fn::GetAtt": [ analysedDreams, Arn ]
   environment:
     TABLE_NAME:
-      Ref: dreamsStorage
+      Ref: analysedDreams
     OPENAI_API_KEY: ${file(./conf/serverless.yml):OPENAI_API_KEY}
 
 functions:
   dream-analyser:
-    handler: handler.analyser
-  dream-objects:
-    handler: handler.createDreamsObject
+    handler: src/domains/ai/functions/handler.analyser
+  analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.create
     events:
       - httpApi:
           path: /dreams
@@ -40,10 +40,10 @@ plugins:
 
 resources:
   Resources:
-    dreamsStorage:
+    analysedDreams:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: dreamsStorage
+        TableName: analysedDreams
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
