@@ -34,6 +34,12 @@ functions:
       - httpApi:
           path: /dreams
           method: POST
+  get-analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.get
+    events:
+      - httpApi:
+          path: /dreams/{id}
+          method: GET
 
 plugins:
   - serverless-esbuild
