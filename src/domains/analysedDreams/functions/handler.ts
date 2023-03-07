@@ -44,7 +44,7 @@ export async function get(event) {
   const params: GetItemCommandInput = {
     TableName: TableName,
     Key: marshall({
-      id: event.queryStringParameters.id,
+      id: event.pathParameters.id,
     }),
   };
 
