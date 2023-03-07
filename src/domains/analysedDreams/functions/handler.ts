@@ -5,6 +5,8 @@ import {
   GetItemCommand,
   GetItemCommandInput,
   ScanCommand,
+  DeleteItemCommand,
+  DeleteItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Constants } from "../../../../constants";
@@ -30,7 +32,7 @@ export async function create(event) {
 
     return { statusCode: 200, body: JSON.stringify(newAnalysedDream) };
   } catch (err) {
-    console.log(err);
+    console.log("Error: ", err);
 
     return {
       body: { error: err.message },
@@ -52,7 +54,7 @@ export async function get(event) {
 
     return { statusCode: 200, body: JSON.stringify(unmarshall(results.Item)) };
   } catch (err) {
-    console.log(err);
+    console.log("Error: ", err);
 
     return {
       body: { error: err.message },
@@ -78,7 +80,26 @@ export async function list() {
 
     return { statusCode: 200, body: JSON.stringify(data) };
   } catch (err) {
-    console.log("Error", err);
+    console.log("Error: ", err);
+    return {
+      body: { error: err.message },
+    };
+  }
+}
+export async function del(event) {
+  const idToBeDeleted = event.pathParameters.id;
+  const params: DeleteItemCommandInput = {
+    TableName: TableName,
+    Key:  marshall({ id: { S: idToBeDeleted } }),
+  };
+
+  try {
+    const results = await dbClient.send(new DeleteItemCommand(params));
+
+    return { statusCode: 200, body: JSON.stringify(results) };
+
+  } catch (err) {
+    console.log("Error: ", err);
     return {
       body: { error: err.message },
     };
