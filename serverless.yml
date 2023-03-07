@@ -46,6 +46,12 @@ functions:
       - httpApi:
           path: /dreams
           method: GET
+  del-analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.del
+    events:
+      - httpApi:
+          path: /dreams/{id}
+          method: DELETE
 
 plugins:
   - serverless-esbuild
