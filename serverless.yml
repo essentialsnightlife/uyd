@@ -28,7 +28,7 @@ provider:
 functions:
   dream-analyser:
     handler: src/domains/ai/functions/handler.analyser
-  analysed-dreams:
+  create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
     events:
       - httpApi:
