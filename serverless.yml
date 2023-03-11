@@ -28,12 +28,30 @@ provider:
 functions:
   dream-analyser:
     handler: src/domains/ai/functions/handler.analyser
-  analysed-dreams:
+  create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
     events:
       - httpApi:
           path: /dreams
           method: POST
+  get-analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.get
+    events:
+      - httpApi:
+          path: /dreams/{id}
+          method: GET
+  list-analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.list
+    events:
+      - httpApi:
+          path: /dreams
+          method: GET
+  del-analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.del
+    events:
+      - httpApi:
+          path: /dreams/{id}
+          method: DELETE
 
 plugins:
   - serverless-esbuild

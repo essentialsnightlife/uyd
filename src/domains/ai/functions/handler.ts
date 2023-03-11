@@ -25,11 +25,11 @@ export async function analyser(event) {
             body: { result: completionText },
             input: event,
         };
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.log("Error: ", err);
 
         return {
-            body: { error: error.message },
+            body: { error: err.message },
             input: event,
         };
     }
