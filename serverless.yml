@@ -11,15 +11,15 @@ provider:
       statements:
         - Effect: Allow
           Action:
-                - dynamodb:Query
-                - dynamodb:DescribeTable
-                - dynamodb:Scan
-                - dynamodb:GetItem
-                - dynamodb:PutItem
-                - dynamodb:UpdateItem
-                - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:DescribeTable
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
           Resource:
-            - "Fn::GetAtt": [ analysedDreams, Arn ]
+            - "Fn::GetAtt": [analysedDreams, Arn]
   environment:
     TABLE_NAME:
       Ref: analysedDreams
@@ -53,3 +53,29 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    UserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        AutoVerifiedAttributes:
+          - email
+        UserPoolName: uyd-user-pool
+        UsernameAttributes:
+          - email
+        UsernameConfiguration:
+          CaseSensitive: false
+        Schema:
+          - Name: email
+            AttributeDataType: String
+            Mutable: false
+            Required: true
+          - Name: name
+            AttributeDataType: String
+            Mutable: true
+            Required: false
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireLowercase: true
+            RequireNumbers: true
+            RequireSymbols: false
+            RequireUppercase: true
