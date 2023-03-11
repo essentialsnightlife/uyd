@@ -96,4 +96,10 @@ resources:
           - https://localhost:3000
         SupportedIdentityProviders:
           - COGNITO
+    UserPoolDomain:
+      Type: AWS::Cognito::UserPoolDomain
+      Properties:
+        Domain: login-uyd
+        UserPoolId:
+          Ref: UserPool
 
