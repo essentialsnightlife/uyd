@@ -79,3 +79,21 @@ resources:
             RequireNumbers: true
             RequireSymbols: false
             RequireUppercase: true
+    UserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: uyd-user-pool-client
+        UserPoolId:
+          Ref: UserPool
+        GenerateSecret: false
+        AllowedOAuthFlows:
+          - implicit
+        AllowedOAuthScopes:
+          - email
+          - openid
+          - profile
+        CallbackURLs:
+          - https://localhost:3000
+        SupportedIdentityProviders:
+          - COGNITO
+
