@@ -120,4 +120,15 @@ resources:
         Domain: login-uyd
         UserPoolId:
           Ref: UserPool
-
+    IdentityPool:
+      Type: AWS::Cognito::IdentityPool
+      Properties:
+        AllowUnauthenticatedIdentities: false
+        IdentityPoolName: uyd-identity-pool
+        CognitoIdentityProviders:
+          [
+            {
+              ClientId: { Ref: UserPoolClient },
+              ProviderName: { "Fn::GetAtt": [UserPool, ProviderName] },
+            },
+          ]
