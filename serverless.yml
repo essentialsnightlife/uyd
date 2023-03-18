@@ -24,6 +24,11 @@ provider:
     TABLE_NAME:
       Ref: analysedDreams
     OPENAI_API_KEY: ${file(./conf/serverless.yml):OPENAI_API_KEY}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:3000
+        - http://localhost:3001
 
 functions:
   dream-analyser:
@@ -32,6 +37,7 @@ functions:
       - httpApi:
           path: /dreams/analyse
           method: POST
+
   create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
     events:
