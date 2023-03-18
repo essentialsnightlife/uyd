@@ -28,6 +28,10 @@ provider:
 functions:
   dream-analyser:
     handler: src/domains/ai/functions/handler.analyser
+    events:
+      - httpApi:
+          path: /dreams/analyse
+          method: POST
   create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
     events:
@@ -120,4 +124,15 @@ resources:
         Domain: login-uyd
         UserPoolId:
           Ref: UserPool
-
+    IdentityPool:
+      Type: AWS::Cognito::IdentityPool
+      Properties:
+        AllowUnauthenticatedIdentities: false
+        IdentityPoolName: uyd-identity-pool
+        CognitoIdentityProviders:
+          [
+            {
+              ClientId: { Ref: UserPoolClient },
+              ProviderName: { "Fn::GetAtt": [UserPool, ProviderName] },
+            },
+          ]

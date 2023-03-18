@@ -4,9 +4,9 @@ import { Constants } from "../../../../constants";
 
 const modelConfig = Constants.OPENAI_MODEL_CONFIG;
 export async function analyser(event) {
-    const prompt = promptGenerator(event.queryStringParameters.question);
+    const prompt = promptGenerator(event.body);
 
-    if (!(event.queryStringParameters || event.queryStringParameters.question)) {
+    if (!event.body) {
         return {
             message: { result: "No question provided" },
             input: event,
