@@ -1,9 +1,26 @@
 import './App.css';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 function App() {
   const [question, setQuestion] = useState('');
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<string | null>(null);
+
+  const handleSubmit = (e: FormEvent, question: string) => {
+    e.preventDefault();
+    fetch('https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: question,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setResponse(data.body.result);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  };
 
   return (
     <div className="App">
@@ -11,7 +28,7 @@ function App() {
         <p className="header">Dream Analyser</p>
       </header>
       <div className="body">
-        <div className="question-box">
+        <form className="question-box" onSubmit={(e) => handleSubmit(e, question)}>
           <textarea
             placeholder="Ask a question"
             value={question}
@@ -19,10 +36,10 @@ function App() {
           />
 
           <button>Ask</button>
-        </div>
+        </form>
 
         <div className="response-box">
-            {response ? (<p>Response 🧠: {response}</p>) : <p>Waiting 🧠</p>}
+          {response ? <p>Response 🧠: {response}</p> : <p>Waiting 🧠</p>}
         </div>
 
         <p> Placeholder: used your daily quota of queries</p>
