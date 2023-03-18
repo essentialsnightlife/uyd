@@ -1,6 +1,6 @@
 :root {
   --primay: black;
-  --bg-primay: white;
+  --bg-primay: yellow;
 
   --link: #2a0b0b;
 }
@@ -15,7 +15,7 @@
 }
 
 p {
-  margin: 20px 0px;
+  margin: 20px 0;
 }
 
 .header {
@@ -23,34 +23,50 @@ p {
 }
 
 .body {
+  font-family: 'Roboto', sans-serif;
   margin: 20px 0 10px;
   font-size: 0.9rem;
 }
 
 button {
-  outline: none;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 35px;
-
-  background: #845ec2;
-  color: white;
+  background-color: var(--bg-primay);
+  color: var(--primay);
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+  margin: 10px 0;
+  display: inline-block;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+textarea {
+    width: 100%;
+    height: 100px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    resize: none;
+}
+
+button:hover {
+  background-color: var(--primay);
+  color: var(--bg-primay);
+  scale: 1.2;
 }
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(5px + 20vmin);
 
   background: var(--bg-primay);
   color: var(--primay);
@@ -58,18 +74,15 @@ button {
 
 .App-link {
   color: #61dafb;
-  color: var(--link);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 button {
   font-size: calc(10px + 2vmin);
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
 }
