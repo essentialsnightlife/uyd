@@ -44,15 +44,14 @@ function App() {
           <TextareaAutosize
             aria-label="minimum height"
             minRows={3}
-            placeholder="Describe your dream here"
-            // style={{ width: 200 }}
+            placeholder="Describe your dream here..."
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
         </form>
         <Button variant="text" size="large" style={{ color: 'black' }} sx={{
             ':hover': {
-                bgcolor: 'grey', // theme.palette.primary.main
+                bgcolor: 'grey',
             },
         }}>
           Go
