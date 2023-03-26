@@ -42,12 +42,12 @@ function App() {
       <Box sx={{ my: 4 }}>
         <form className="question-box" onSubmit={(e) => handleSubmit(e, question)}>
           <TextareaAutosize
-            aria-label="minimum height"
-            minRows={3}
-            placeholder="Describe your dream here..."
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-          />
+              aria-label="minimum height"
+              minRows={3}
+              placeholder="Describe your dream here..."
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)} nonce={undefined} onResize={undefined}
+              onResizeCapture={undefined}          />
         </form>
         <Button variant="text" size="large" style={{ color: 'black' }} sx={{
             ':hover': {
