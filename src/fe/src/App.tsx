@@ -1,5 +1,12 @@
-import './App.css';
+import * as React from 'react';
 import { FormEvent, useState } from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+import './App.css';
+import Footer from './Footer';
 
 function App() {
   const [question, setQuestion] = useState('');
@@ -23,40 +30,41 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p className="header">Dream Analyser</p>
-      </header>
-      <div className="body">
+    <Container maxWidth="sm">
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Dream Analyser
+        </Typography>
+        <Typography sx={{ mt: 1, mb: 3 }} color="text.secondary">
+          ☁️ Start here | 🧠 Use your dreams
+        </Typography>
+      </Box>
+      <Box sx={{ my: 4 }}>
         <form className="question-box" onSubmit={(e) => handleSubmit(e, question)}>
-          <textarea
-            placeholder="Ask a question"
+          <TextareaAutosize
+            aria-label="minimum height"
+            minRows={3}
+            placeholder="Describe your dream here"
+            // style={{ width: 200 }}
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
           />
-
-          <button>Ask</button>
         </form>
-
-        <div className="response-box">
-          {response ? <p>Response 🧠: {response}</p> : <p>Waiting 🧠</p>}
-        </div>
-
-        <p> Placeholder: used your daily quota of queries</p>
-      </div>
-
-      <div className="footer">
-        <p>
-          <a className="App-link" href="#" target="_blank" rel="noopener noreferrer">
-            Leave Feedback
-          </a>
-          {' | '}
-          <a className="App-link" href="#" target="_blank" rel="noopener noreferrer">
-            Peng Devs
-          </a>
-        </p>
-      </div>
-    </div>
+        <Button variant="text" size="large" style={{ color: 'black' }} sx={{
+            ':hover': {
+                bgcolor: 'grey', // theme.palette.primary.main
+            },
+        }}>
+          Go
+        </Button>
+      </Box>
+      <Box>
+        <Typography variant="h6">
+          {response ? `Response 🧠: ${response}` : null}
+        </Typography>
+      </Box>
+      <Footer />
+    </Container>
   );
 }
 

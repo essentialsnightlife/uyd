@@ -1,45 +1,8 @@
 :root {
-  --primay: black;
-  --bg-primay: yellow;
+  --primary: red;
+  --bg-primary: yellow;
 
   --link: #2a0b0b;
-}
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-p {
-  margin: 20px 0;
-}
-
-.header {
-  font-size: 3rem;
-}
-
-.body {
-  font-family: 'Roboto', sans-serif;
-  margin: 20px 0 10px;
-  font-size: 0.9rem;
-}
-
-button {
-  background-color: var(--bg-primay);
-  color: var(--primay);
-  padding: 10px 15px;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 14px;
-  text-align: center;
-  text-decoration: none;
-  transition: all 0.3s ease 0s;
-  margin: 10px 0;
-  display: inline-block;
 }
 
 textarea {
@@ -51,38 +14,4 @@ textarea {
     border-radius: 4px;
     background-color: white;
     resize: none;
-}
-
-button:hover {
-  background-color: var(--primay);
-  color: var(--bg-primay);
-  scale: 1.2;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 10vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(5px + 20vmin);
-
-  background: var(--bg-primay);
-  color: var(--primay);
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-
-button {
-  font-size: calc(10px + 2vmin);
-}
-
-@media (max-width: 600px) {
-  body {
-    font-size: 14px;
-  }
 }
