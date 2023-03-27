@@ -4,10 +4,12 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Footer from './Footer';
 import {ReactElement} from "react";
+import Navbar from "./Navbar";
 
 export default ({ children }: { children: ReactElement }) => {
   return (
     <Container maxWidth="sm">
+      <Navbar />
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Dream Analyser
