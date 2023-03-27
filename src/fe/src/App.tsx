@@ -59,7 +59,7 @@ function App() {
         </Box>
         <Box>
           <Typography variant="h6">
-            {response ? `Response 🧠: ${response}` : null}
+            {response ? `Response 🧠: ${response}` : "filler text"}
           </Typography>
         </Box>
       </>

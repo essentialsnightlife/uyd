@@ -4,7 +4,7 @@ import Link from '@mui/material/Link';
 
 export default function Footer() {
     return (
-        <Typography variant="body2" color="text.secondary" >
+        <Typography variant="body2" color="text.secondary" sx={{ my: 4 }}>
             {'Copyright © '}
             <Link color="inherit" >
                 Peng Devs
