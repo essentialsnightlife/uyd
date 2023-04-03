@@ -1,10 +1,12 @@
-import * as React from 'react';
-import { FormEvent, useState } from 'react';
-import Typography from '@mui/material/Typography';
+import './App.css';
+
+import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
-import './App.css';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { FormEvent, useState } from 'react';
+
 import Layout from './Layout';
 
 function App() {
@@ -43,23 +45,25 @@ function App() {
               onResize={undefined}
               onResizeCapture={undefined}
             />
+            <Button
+              variant="text"
+              type="submit"
+              size="large"
+              style={{ color: 'black' }}
+              sx={{
+                ':hover': {
+                  bgcolor: 'grey',
+                },
+              }}
+            >
+              Go
+            </Button>
           </form>
-          <Button
-            variant="text"
-            size="large"
-            style={{ color: 'black' }}
-            sx={{
-              ':hover': {
-                bgcolor: 'grey',
-              },
-            }}
-          >
-            Go
-          </Button>
         </Box>
         <Box>
           <Typography variant="h6">
-            {response ? `Response 🧠: ${response}` : "filler text"}
+            {response ? `Response 🧠: ${response}` : 'filler text'}
+            {response}
           </Typography>
         </Box>
       </>
