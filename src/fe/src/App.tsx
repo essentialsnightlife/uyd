@@ -61,7 +61,14 @@ function App() {
           </form>
         </Box>
         <Box>
-          <Typography variant="h6">
+          <Typography
+            variant="h6"
+            sx={{
+              mr: 2,
+              fontFamily: 'monospace',
+              textDecoration: 'none',
+            }}
+          >
             {response ? `Response 🧠: ${response}` : 'filler text'}
             {response}
           </Typography>
