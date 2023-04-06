@@ -9,9 +9,19 @@ import { FormEvent, useState } from 'react';
 
 import Layout from './Layout';
 
+type AnsweredQuestion = {
+  id?: string;
+  userId?: string;
+  query: string;
+  response: string;
+};
+
 function App() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState<string | null>(null);
+  const [previousAnsweredQuestions, setPreviousAnsweredQuestions] = useState<
+    AnsweredQuestion[]
+  >([]);
 
   const handleSubmit = (e: FormEvent, question: string) => {
     e.preventDefault();
@@ -24,6 +34,8 @@ function App() {
       .then((data) => {
         console.log(data);
         setResponse(data.body.result);
+        const answeredQuestion = { query: question, response: data.body.result };
+        setPreviousAnsweredQuestions((prev) => [...prev, answeredQuestion]);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -70,6 +82,32 @@ function App() {
           >
             {response ? `Response 🧠: ${response}` : 'filler text'}
             {response}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography
+            variant="h6"
+            sx={{
+              mr: 2,
+              mt: 6,
+            }}
+          >
+            Previously Asked Questions 📝
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              mr: 2,
+              fontFamily: 'monospace',
+              textDecoration: 'none',
+            }}
+          >
+            {previousAnsweredQuestions.map((question) => (
+              <div key={question.query}>
+                <p>Question: {question.query}</p>
+                <p>Response: {question.response}</p>
+              </div>
+            ))}
           </Typography>
         </Box>
       </>
