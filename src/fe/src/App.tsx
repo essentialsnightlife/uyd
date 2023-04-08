@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { FormEvent, useState } from 'react';
 
+import { DreamAnalyser } from './DreamAnalyser';
 import Layout from './Layout';
 
 type AnsweredQuestion = {
@@ -45,32 +46,12 @@ function App() {
   return (
     <Layout>
       <>
-        <Box sx={{ my: 4 }}>
-          <form className="question-box" onSubmit={(e) => handleSubmit(e, question)}>
-            <TextareaAutosize
-              minRows={3}
-              placeholder="Describe your dream here..."
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              nonce={undefined}
-              onResize={undefined}
-              onResizeCapture={undefined}
-            />
-            <Button
-              variant="text"
-              type="submit"
-              size="large"
-              style={{ color: 'black' }}
-              sx={{
-                ':hover': {
-                  bgcolor: 'grey',
-                },
-              }}
-            >
-              Go
-            </Button>
-          </form>
-        </Box>
+        <DreamAnalyser
+          question={question}
+          setQuestion={setQuestion}
+          onSubmit={handleSubmit}
+          placeholderText="Describe your dream here..."
+        />
         <Box>
           <Typography
             variant="h6"
