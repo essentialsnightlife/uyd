@@ -1,17 +1,20 @@
 import './App.css';
 
-import TextareaAutosize from '@mui/base/TextareaAutosize';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { FormEvent, useState } from 'react';
 
+import { AnalyserResponse } from './AnalyserResponse';
+import { DreamAnalyser } from './DreamAnalyser';
 import Layout from './Layout';
+import { PreviouslyAskedQuestions } from './PreviouslyAskedQuestions';
+import { AnsweredQuestion } from './types';
 
 function App() {
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState<string | null>(null);
+  const [previousAnsweredQuestions, setPreviousAnsweredQuestions] = useState<
+    AnsweredQuestion[]
+  >([]);
 
   const handleSubmit = (e: FormEvent, question: string) => {
     e.preventDefault();
@@ -24,6 +27,8 @@ function App() {
       .then((data) => {
         console.log(data);
         setResponse(data.body.result);
+        const answeredQuestion = { query: question, response: data.body.result };
+        setPreviousAnsweredQuestions((prev) => [...prev, answeredQuestion]);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -33,46 +38,17 @@ function App() {
   return (
     <Layout>
       <>
-        <Box sx={{ my: 4 }}>
-          <form className="question-box" onSubmit={(e) => handleSubmit(e, question)}>
-            <TextareaAutosize
-              aria-label="minimum height"
-              minRows={3}
-              placeholder="Describe your dream here..."
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              nonce={undefined}
-              onResize={undefined}
-              onResizeCapture={undefined}
-            />
-            <Button
-              variant="text"
-              type="submit"
-              size="large"
-              style={{ color: 'black' }}
-              sx={{
-                ':hover': {
-                  bgcolor: 'grey',
-                },
-              }}
-            >
-              Go
-            </Button>
-          </form>
-        </Box>
-        <Box>
-          <Typography
-            variant="h6"
-            sx={{
-              mr: 2,
-              fontFamily: 'monospace',
-              textDecoration: 'none',
-            }}
-          >
-            {response ? `Response 🧠: ${response}` : 'filler text'}
-            {response}
-          </Typography>
-        </Box>
+        <DreamAnalyser
+          question={question}
+          setQuestion={setQuestion}
+          onSubmit={handleSubmit}
+          placeholderText="Describe your dream here..."
+        />
+        <AnalyserResponse nonResponseText={'...'} responseText={response} />
+        <PreviouslyAskedQuestions
+          previousAnsweredQuestions={previousAnsweredQuestions}
+          title="Previously Asked Questions 📝"
+        />
       </>
     </Layout>
   );
