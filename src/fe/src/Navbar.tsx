@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-const pages = ['Analyser', 'Dream Wall', 'Guides', 'Your History'];
+const pages = ['Guides', 'Analyser', 'Dream Wall', 'Your History'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {

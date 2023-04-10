@@ -4,8 +4,8 @@ import { Session } from '@supabase/supabase-js';
 import * as React from 'react';
 import { FormEvent, useEffect, useState } from 'react';
 
-import { supabaseClient } from '../../auth/client';
 import { AnalyserResponse } from './AnalyserResponse';
+import { supabaseClient } from './auth/client';
 import { DreamAnalyser } from './DreamAnalyser';
 import Layout from './Layout';
 import LoginMagicLink from './LoginMagicLink';

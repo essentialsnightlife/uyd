@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useState } from 'react';
 
-import { supabaseClient } from '../../auth/client';
+import { supabaseClient } from './auth/client';
 import Layout from './Layout';
 
 const emailRedirectUrl = import.meta.env.VITE_EMAIL_REDIRECT_URL;
