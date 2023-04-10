@@ -12,7 +12,7 @@ const emailRedirectUrl = import.meta.env.VITE_EMAIL_REDIRECT_URL;
 const handleLogin = async (email: string) => {
   try {
     const { data } = await supabaseClient().auth.signInWithOtp({
-      email: email,
+      email,
       options: {
         emailRedirectTo: emailRedirectUrl,
       },
@@ -26,6 +26,7 @@ const handleLogin = async (email: string) => {
 
 function LoginMagicLink() {
   const [email, setEmail] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   return (
     <Layout>
@@ -44,7 +45,9 @@ function LoginMagicLink() {
           noValidate
           onSubmit={(e) => {
             e.preventDefault();
+            setLoading(true);
             handleLogin(email);
+            setLoading(false);
           }}
         >
           <TextField
@@ -54,6 +57,7 @@ function LoginMagicLink() {
             fullWidth
           />
           <Button
+            disabled={loading}
             variant="contained"
             type="submit"
             sx={{
@@ -63,7 +67,7 @@ function LoginMagicLink() {
               },
             }}
           >
-            Get Magic Link
+            {loading ? <span>Loading...</span> : 'Get Magic Link'}
           </Button>
         </form>
       </>

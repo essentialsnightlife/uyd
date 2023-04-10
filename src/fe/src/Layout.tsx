@@ -1,12 +1,13 @@
-import * as React from 'react';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Footer from './Footer';
-import {ReactElement} from "react";
-import Navbar from "./Navbar";
+import * as React from 'react';
+import { ReactElement } from 'react';
 
-export default ({ children }: { children: ReactElement }) => {
+import Footer from './Footer';
+import Navbar from './Navbar';
+
+function Layout({ children }: { children: ReactElement }) {
   return (
     <Container maxWidth="sm">
       <Navbar />
@@ -22,4 +23,6 @@ export default ({ children }: { children: ReactElement }) => {
       <Footer />
     </Container>
   );
-};
+}
+
+export default Layout;
