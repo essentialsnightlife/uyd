@@ -1,11 +1,14 @@
 import './App.css';
 
+import { Session } from '@supabase/supabase-js';
 import * as React from 'react';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
+import { supabaseClient } from '../../auth/client';
 import { AnalyserResponse } from './AnalyserResponse';
 import { DreamAnalyser } from './DreamAnalyser';
 import Layout from './Layout';
+import LoginMagicLink from './LoginMagicLink';
 import { PreviouslyAskedQuestions } from './PreviouslyAskedQuestions';
 import { AnsweredQuestion } from './types';
 
@@ -15,6 +18,24 @@ function App() {
   const [previousAnsweredQuestions, setPreviousAnsweredQuestions] = useState<
     AnsweredQuestion[]
   >([]);
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabaseClient()
+      .auth.getSession()
+      .then(({ data: { session } }) => {
+        console.log(session);
+        setSession(session);
+      });
+
+    const {
+      data: { subscription },
+    } = supabaseClient().auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSubmit = (e: FormEvent, question: string) => {
     e.preventDefault();
@@ -34,7 +55,9 @@ function App() {
         console.error('Error:', error);
       });
   };
-
+  if (!session) {
+    return <LoginMagicLink />;
+  }
   return (
     <Layout>
       <>
