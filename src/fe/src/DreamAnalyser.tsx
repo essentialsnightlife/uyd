@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { SyntheticEvent } from 'react';
 import * as React from 'react';
 
-import { Constants } from '../../../constants';
+import { ANALYSER_INPUT_MAX_CHARS } from './constants';
 
 interface DreamAnalyserProps {
   question: string;
@@ -23,7 +23,7 @@ export function DreamAnalyser({
     <Box sx={{ my: 4 }}>
       <form className="question-box" onSubmit={(e) => onSubmit(e, question)}>
         <TextareaAutosize
-          maxLength={Constants.ANALYSER_INPUT_MAX_CHARS}
+          maxLength={ANALYSER_INPUT_MAX_CHARS}
           minRows={3}
           placeholder={placeholderText}
           value={question}

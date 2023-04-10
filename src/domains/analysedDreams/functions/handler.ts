@@ -9,9 +9,8 @@ import {
   DeleteItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Constants } from "../../../../constants";
+import { AWS_REGION } from "../../../fe/src/constants";
 
-import AWS_REGION = Constants.AWS_REGION;
 const dbClient = new DynamoDBClient({ region: AWS_REGION });
 const TableName = process.env.TABLE_NAME;
 export async function create(event) {

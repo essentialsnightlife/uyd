@@ -1,8 +1,8 @@
 import { config } from "../config";
 import { OpenAIApi } from "openai";
-import { Constants } from "../../../../constants";
+import { BOT_INSTRUCTIONS } from "../../../fe/src/constants";
 
-const botInstructions: string = Constants.BOT_INSTRUCTIONS;
+const botInstructions: string = BOT_INSTRUCTIONS;
 
 export const promptGenerator = (question: string) => {
   return botInstructions + question;

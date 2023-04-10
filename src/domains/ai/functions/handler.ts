@@ -1,8 +1,7 @@
 import { sendAIQuestion } from "./";
 import { promptGenerator } from "./";
-import { Constants } from "../../../../constants";
+import { OPENAI_MODEL_CONFIG } from "../../../fe/src/constants";
 
-const modelConfig = Constants.OPENAI_MODEL_CONFIG;
 export async function analyser(event) {
     const prompt = promptGenerator(event.body);
 
@@ -15,10 +14,10 @@ export async function analyser(event) {
 
     try {
         const completionText = await sendAIQuestion({
-            model: modelConfig.model,
+            model: OPENAI_MODEL_CONFIG.model,
             prompt: prompt,
-            temperature: modelConfig.temperature,
-            max_tokens: modelConfig.max_tokens,
+            temperature: OPENAI_MODEL_CONFIG.temperature,
+            max_tokens: OPENAI_MODEL_CONFIG.max_tokens,
         });
 
         return {
