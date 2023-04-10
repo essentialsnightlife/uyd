@@ -12,7 +12,7 @@ const emailRedirectUrl = import.meta.env.VITE_EMAIL_REDIRECT_URL;
 const handleLogin = async (email: string) => {
   try {
     const { data } = await supabaseClient().auth.signInWithOtp({
-      email: email,
+      email,
       options: {
         emailRedirectTo: emailRedirectUrl,
       },
