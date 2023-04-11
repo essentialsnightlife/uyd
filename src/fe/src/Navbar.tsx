@@ -13,7 +13,7 @@ import * as React from 'react';
 
 import { supabaseClient } from './auth/client';
 
-const pages = ['Guides', 'Analyser', 'Dream Wall', 'Your History'];
+const pages = ['Guides', 'Analyser', 'Featured', 'Your History'];
 const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
