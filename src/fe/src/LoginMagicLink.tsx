@@ -39,7 +39,7 @@ function LoginMagicLink() {
           component="h2"
           gutterBottom
         >
-          Login with Magic Link
+          Sign Up or Login with Magic Link
         </Typography>
         <form
           noValidate
