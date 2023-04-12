@@ -15,6 +15,7 @@ const dbClient = new DynamoDBClient({ region: AWS_REGION });
 const TableName = process.env.TABLE_NAME;
 export async function create(event) {
   const newAnalysedDream = {
+    date: { S: event.body.date },
     id: { S: event.body.id },
     userId: { S: event.body.userId },
     query: { S: event.body.query },
