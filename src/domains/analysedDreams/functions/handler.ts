@@ -19,6 +19,7 @@ export async function create(event) {
     userId: { S: event.body.userId },
     query: { S: event.body.query },
     response: { S: event.body.response },
+    date: { S: event.body.date },
   };
 
   const params: PutItemCommandInput = {
