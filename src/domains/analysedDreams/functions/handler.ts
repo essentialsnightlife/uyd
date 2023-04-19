@@ -13,13 +13,26 @@ import { AWS_REGION } from "../../../fe/src/constants";
 
 const dbClient = new DynamoDBClient({ region: AWS_REGION });
 const TableName = process.env.TABLE_NAME;
+
 export async function create(event) {
+  let body;
+  try {
+    // (via app) If the body is JSON, parse it
+    body = JSON.parse(event.body);
+    console.log("JSON Parsed Body");
+  }
+  catch (err) {
+    // (via serverless framework) If the body is not JSON, it is a string
+    body = event.body;
+    console.log("Event Body");
+  }
+
   const newAnalysedDream = {
-    date: { S: event.body.date },
-    id: { S: event.body.id },
-    userId: { S: event.body.userId },
-    query: { S: event.body.query },
-    response: { S: event.body.response },
+    date: { S: body.date },
+    id: { S: body.id },
+    userId: { S: body.userId },
+    query: { S: body.query },
+    response: { S: body.response },
   };
 
   const params: PutItemCommandInput = {
@@ -30,14 +43,14 @@ export async function create(event) {
   try {
     await dbClient.send(new PutItemCommand(params));
 
-    return { statusCode: 200, body: JSON.stringify(newAnalysedDream) };
+    return JSON.stringify({ statusCode: 200, body });
   } catch (err) {
     console.log("Error: ", err);
 
-    return {
+    return JSON.stringify({
       body: { error: err.message },
       input: event,
-    };
+    });
   }
 }
 export async function get(event) {

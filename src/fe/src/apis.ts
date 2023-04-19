@@ -28,7 +28,7 @@ export async function saveAnsweredQuery({
   const data = await response.json();
   console.log(data);
   if (data.body.error) {
-    throw new Error(data.body.error);
+    throw new Error(data);
   }
   return { data, answeredQuery: formattedAnsweredQuery };
 }
@@ -42,5 +42,9 @@ export async function analyseDream(query: string) {
     },
   );
   const data = await response.json();
+  if (data.body.error) {
+    console.log(data.body);
+    throw new Error(data.body.error);
+  }
   return data.body.result;
 }
