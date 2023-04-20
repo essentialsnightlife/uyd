@@ -28,11 +28,11 @@ export async function create(event) {
   }
 
   const newAnalysedDream = {
-    date: { S: body.date },
-    id: { S: body.id },
-    userId: { S: body.userId },
-    query: { S: body.query },
-    response: { S: body.response },
+    id: { S: event.body.id },
+    userId: { S: event.body.userId },
+    query: { S: event.body.query },
+    response: { S: event.body.response },
+    date: { S: event.body.date },
   };
 
   const params: PutItemCommandInput = {
