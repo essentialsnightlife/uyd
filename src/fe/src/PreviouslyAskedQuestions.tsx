@@ -34,6 +34,9 @@ export function PreviouslyAskedQuestions({
       >
         {previousAnsweredQuestions.map((question) => (
           <div key={question.query}>
+            <p>
+              {String(question?.date).slice(0, 10)} {String(question?.date).slice(11, 16)}
+            </p>
             <p>Question: {question.query}</p>
             <p>Response: {question.response}</p>
           </div>
