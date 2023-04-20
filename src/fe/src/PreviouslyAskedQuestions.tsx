@@ -2,10 +2,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-import { AnsweredQuestion } from './types';
+import { AnsweredQuery } from './types';
 
 interface PreviouslyAskedQuestionsProps {
-  previousAnsweredQuestions: AnsweredQuestion[];
+  previousAnsweredQuestions: AnsweredQuery[];
   title: string;
 }
 
