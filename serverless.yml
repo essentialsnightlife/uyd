@@ -37,6 +37,8 @@ functions:
       - httpApi:
           path: /dreams/analyse
           method: POST
+          cors:
+            origin: 'https://www.useyourdream.com/'
 
   create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
@@ -44,6 +46,8 @@ functions:
       - httpApi:
           path: /dreams
           method: POST
+          cors:
+            origin: 'https://www.useyourdream.com/'
   get-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.get
     events:
