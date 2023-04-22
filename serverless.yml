@@ -38,7 +38,7 @@ functions:
           path: /dreams/analyse
           method: POST
           cors:
-            origin: 'https://www.useyourdream.com/'
+            origin: ["https://www.useyourdream.com/","https://uyd.vercel.app/"]
 
   create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
@@ -47,7 +47,7 @@ functions:
           path: /dreams
           method: POST
           cors:
-            origin: 'https://www.useyourdream.com/'
+            origin: ["https://www.useyourdream.com/","https://uyd.vercel.app/"]
   get-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.get
     events:
