@@ -29,6 +29,8 @@ provider:
       allowedOrigins:
         - http://localhost:3000
         - http://localhost:3001
+        - https://www.useyourdream.com
+        - https://uyd.vercel.app/
 
 functions:
   dream-analyser:
@@ -37,8 +39,6 @@ functions:
       - httpApi:
           path: /dreams/analyse
           method: POST
-          cors:
-            origin: ["https://www.useyourdream.com/","https://uyd.vercel.app/"]
 
   create-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.create
@@ -46,20 +46,21 @@ functions:
       - httpApi:
           path: /dreams
           method: POST
-          cors:
-            origin: ["https://www.useyourdream.com/","https://uyd.vercel.app/"]
+
   get-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.get
     events:
       - httpApi:
           path: /dreams/{id}
           method: GET
+
   list-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.list
     events:
       - httpApi:
           path: /dreams
           method: GET
+
   del-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.del
     events:
