@@ -9,8 +9,21 @@ import Layout from './Layout';
 
 const emailRedirectUrl = import.meta.env.VITE_EMAIL_REDIRECT_URL;
 
+const isEmailValid = (email: string) => {
+  const re = /\S+@\S+\.\S+/;
+  return re.test(email);
+};
+
+function handleInvalidEmail() {
+  alert('Please double check your email address and try again 🙏');
+}
+
 const handleLogin = async (email: string) => {
   try {
+    if (!isEmailValid(email)) {
+      handleInvalidEmail();
+      return;
+    }
     const { data } = await supabaseClient().auth.signInWithOtp({
       email,
       options: {
@@ -20,7 +33,8 @@ const handleLogin = async (email: string) => {
     console.log(data);
     alert('Success: Check your email to login!');
   } catch (error) {
-    console.log(error);
+    console.log('Error: ', error);
+    alert('Something went wrong 🙈, please try again!');
   }
 };
 
