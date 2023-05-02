@@ -1,5 +1,7 @@
 import { Session } from '@supabase/supabase-js';
 
+import { AnsweredQuery } from './types';
+
 export async function saveAnsweredQuery({
   session,
   query,
@@ -9,7 +11,7 @@ export async function saveAnsweredQuery({
   query: string;
   analysedDream: string;
 }) {
-  const formattedAnsweredQuery = {
+  const formattedAnsweredQuery: AnsweredQuery = {
     id: 'UYD' + Date.now(),
     userId: session?.user.id,
     query,
@@ -37,7 +39,6 @@ export async function analyseDream(query: string) {
     'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/analyse',
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: query,
     },
   );
