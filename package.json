@@ -21,9 +21,11 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.315.0",
+    "@aws-sdk/client-sns": "^3.319.0",
     "@aws-sdk/util-dynamodb": "^3.315.0",
     "@supabase/supabase-js": "^2.15.0",
-    "openai": "^3.2.1"
+    "openai": "^3.2.1",
+    "serverless-offline-sns": "^0.76.0"
   },
   "name": "uyd",
   "version": "1.0.0",

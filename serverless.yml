@@ -1,11 +1,11 @@
 service: uyd
-frameworkVersion: "3"
 useDotenv: true
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs14.x
   region: ${file(./conf/serverless.yml):AWS_REGION}
+  lambdaHashingVersion: 20201221
   iam:
     role:
       statements:
@@ -29,37 +29,37 @@ provider:
       allowedOrigins:
         - http://localhost:3000
         - http://localhost:3001
+        - http://127.0.0.1:5173
+        - https://www.useyourdream.com
+        - https://uyd.vercel.app/
 
 functions:
+  save-analysed-dream:
+    handler: src/domains/analysedDreams/functions/handler.save
+    events:
+      - sns: AnsweredQueryTopic
+
   dream-analyser:
     handler: src/domains/ai/functions/handler.analyser
     events:
       - httpApi:
           path: /dreams/analyse
           method: POST
-          cors:
-            origin: ["https://www.useyourdream.com/","https://uyd.vercel.app/"]
 
-  create-analysed-dreams:
-    handler: src/domains/analysedDreams/functions/handler.create
-    events:
-      - httpApi:
-          path: /dreams
-          method: POST
-          cors:
-            origin: ["https://www.useyourdream.com/","https://uyd.vercel.app/"]
   get-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.get
     events:
       - httpApi:
           path: /dreams/{id}
           method: GET
+
   list-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.list
     events:
       - httpApi:
           path: /dreams
           method: GET
+
   del-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.del
     events:
@@ -69,6 +69,7 @@ functions:
 
 plugins:
   - serverless-esbuild
+  - serverless-offline-sns
 
 resources:
   Resources:
@@ -85,64 +86,29 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    UserPool:
-      Type: AWS::Cognito::UserPool
+    SNSTopicPolicy:
+      Type: AWS::SNS::TopicPolicy
       Properties:
-        AutoVerifiedAttributes:
-          - email
-        UserPoolName: uyd-user-pool
-        UsernameAttributes:
-          - email
-        UsernameConfiguration:
-          CaseSensitive: false
-        Schema:
-          - Name: email
-            AttributeDataType: String
-            Mutable: false
-            Required: true
-          - Name: name
-            AttributeDataType: String
-            Mutable: true
-            Required: false
-        Policies:
-          PasswordPolicy:
-            MinimumLength: 8
-            RequireLowercase: true
-            RequireNumbers: true
-            RequireSymbols: false
-            RequireUppercase: true
-    UserPoolClient:
-      Type: AWS::Cognito::UserPoolClient
-      Properties:
-        ClientName: uyd-user-pool-client
-        UserPoolId:
-          Ref: UserPool
-        GenerateSecret: false
-        AllowedOAuthFlows:
-          - implicit
-        AllowedOAuthScopes:
-          - email
-          - openid
-          - profile
-        CallbackURLs:
-          - https://localhost:3000
-        SupportedIdentityProviders:
-          - COGNITO
-    UserPoolDomain:
-      Type: AWS::Cognito::UserPoolDomain
-      Properties:
-        Domain: login-uyd
-        UserPoolId:
-          Ref: UserPool
-    IdentityPool:
-      Type: AWS::Cognito::IdentityPool
-      Properties:
-        AllowUnauthenticatedIdentities: false
-        IdentityPoolName: uyd-identity-pool
-        CognitoIdentityProviders:
-          [
-            {
-              ClientId: { Ref: UserPoolClient },
-              ProviderName: { "Fn::GetAtt": [UserPool, ProviderName] },
-            },
-          ]
+        Topics:
+          - arn:aws:sns:eu-west-2:410317984454:DreamRecordTopic
+          - arn:aws:sns:eu-west-2:410317984454:TestTopic
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: AllowLambdaReceivingSNSMessages
+              Effect: Allow
+              Principal:
+                Service: lambda.amazonaws.com
+              Action: sns:Receive
+              Resource: "*"
+            - Sid: AllowSNSSendMessage
+              Effect: Allow
+              Principal:
+                Service: sns.amazonaws.com
+              Action: sns:Publish
+              Resource: "*"
+
+custom:
+  serverless-offline-sns:
+    port: 4002
+    debug: false
