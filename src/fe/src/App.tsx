@@ -81,6 +81,16 @@ function App() {
       return { snsResponse };
     } catch (err: unknown) {
       console.log('Error: ', err);
+      console.log(err);
+      console.log(
+        'aws access: ',
+        import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+        'secretAccessKey: ',
+        import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+      );
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      console.log(err.stack);
     }
   }
 
