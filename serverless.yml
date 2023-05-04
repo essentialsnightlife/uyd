@@ -53,13 +53,6 @@ functions:
           path: /dreams/{id}
           method: GET
 
-  list-analysed-dreams:
-    handler: src/domains/analysedDreams/functions/handler.list
-    events:
-      - httpApi:
-          path: /dreams
-          method: GET
-
   del-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.del
     events:
@@ -107,6 +100,19 @@ resources:
                 Service: sns.amazonaws.com
               Action: sns:Publish
               Resource: "*"
+#    LambdaCors:
+#        Type: AWS::Lambda::Url
+#        Properties:
+#          TargetFunctionArn: !GetAtt uyd-dev-dream-analyser.Arn # Arn needs to reference function > save-analysed-dream
+#          AuthType: NONE
+#          Cors:
+#            AllowOrigins:
+#              allowedOrigins:
+#                - http://localhost:3000
+#                - http://localhost:3001
+#                - http://127.0.0.1:5173
+#                - https://www.useyourdream.com
+#                - https://uyd.vercel.app/
 
 custom:
   serverless-offline-sns:

@@ -25,6 +25,15 @@ export async function save(event) {
     date: { S: date },
   };
 
+  //example new analysed dream
+    // {
+    //   id: 'UYD1630546800000',
+    //   userId: '612f1b0a1c9d5b006a0f1b9e',
+    //   query: 'I dreamt was eating the sandwich and then I woke up.',
+    //   response: 'You are a very creative person.'
+    //   date: '2021-09-01T00:00:00.000Z'
+    // }
+
   const params: PutItemCommandInput = {
     TableName: TableName,
     Item: newAnalysedDream,

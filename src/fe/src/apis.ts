@@ -47,6 +47,7 @@ export async function analyseDream(query: string) {
       },
     );
     data = await response.json();
+    console.log('query: ', query);
     console.log('data gott: ', data);
   } catch (err: unknown) {
     console.log('api error');
