@@ -35,15 +35,26 @@ export async function saveAnsweredQuery({
   return { data, answeredQuery: formattedAnsweredQuery };
 }
 export async function analyseDream(query: string) {
-  const response = await fetch(
-    'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/analyse',
-    {
-      method: 'POST',
-      body: query,
-    },
-  );
-  const data = await response.json();
+  let response;
+  let data;
+  try {
+    response = await fetch(
+      'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/analyse',
+      {
+        method: 'POST',
+        body: query,
+      },
+    );
+    data = await response.json();
+    console.log('data gott: ', data);
+  } catch (err: unknown) {
+    console.log('api error');
+    console.log(err);
+    throw new Error('api error');
+  }
+
   if (data.body.error) {
+    console.log('data body error');
     console.log(data.body);
     throw new Error(data.body.error);
   }
