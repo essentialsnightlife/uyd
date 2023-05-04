@@ -42,6 +42,7 @@ export async function analyseDream(query: string) {
       'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/analyse',
       {
         method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
         body: query,
       },
     );
