@@ -18,6 +18,7 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
+            - dynamodb:BatchGetItem
           Resource:
             - "Fn::GetAtt": [analysedDreams, Arn]
   environment:
@@ -54,19 +55,19 @@ functions:
           path: /dreams/analyse
           method: POST
 
-  get-analysed-dreams:
-    handler: src/domains/analysedDreams/functions/handler.get
-    events:
-      - httpApi:
-          path: /dreams/{id}
-          method: GET
-
   del-analysed-dreams:
     handler: src/domains/analysedDreams/functions/handler.del
     events:
       - httpApi:
           path: /dreams/{id}
           method: DELETE
+
+  get-user-analysed-dreams:
+    handler: src/domains/analysedDreams/functions/handler.getUserAnalysedDreams
+    events:
+      - httpApi:
+          path: /dreams
+          method: GET
 
 plugins:
   - serverless-esbuild

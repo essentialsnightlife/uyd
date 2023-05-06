@@ -1,12 +1,12 @@
 import {
-  DynamoDBClient,
-  PutItemCommand,
-  PutItemCommandInput,
-  GetItemCommand,
-  GetItemCommandInput,
-  ScanCommand,
-  DeleteItemCommand,
-  DeleteItemCommandInput,
+    DynamoDBClient,
+    PutItemCommand,
+    PutItemCommandInput,
+    GetItemCommand,
+    GetItemCommandInput,
+    ScanCommand,
+    DeleteItemCommand,
+    DeleteItemCommandInput, BatchGetItemCommandInput, BatchGetItemCommand, ScanCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { AWS_REGION } from "../../../fe/src/constants";
@@ -52,28 +52,33 @@ export async function save(event) {
     });
   }
 }
-export async function get(event) {
-  const params: GetItemCommandInput = {
-    TableName: TableName,
-    Key: marshall({
-      id: event.pathParameters.id,
-    }),
-  };
 
-  try {
-    const results = await dbClient.send(new GetItemCommand(params));
-    console.log(results);
+export async function getUserAnalysedDreams(event) {
+    const params: ScanCommandInput = {
+        TableName: TableName,
+        FilterExpression: "userId = :userId AND id <> :id",
+        ExpressionAttributeValues: {
+            ":userId": {S: event.body.userId},
+            ":id": {S: '0'},
+        }
+    }
 
-    return { statusCode: 200, body: JSON.stringify(unmarshall(results.Item)) };
-  } catch (err) {
-    console.log("Error: ", err);
+    try {
 
-    return {
-      body: { error: err.message },
-      input: event,
-    };
-  }
+        const results = await dbClient.send(new ScanCommand(params));
+        console.log(results);
+
+        return {statusCode: 200, userId: event.body.userId, responses: results.Items };
+    } catch (err) {
+        console.log("Error: ", err);
+
+        return {
+            body: {error: err.message},
+            input: event,
+        };
+    }
 }
+
 export async function list() {
   try {
     const data = await dbClient.send(new ScanCommand({ TableName: TableName }));
