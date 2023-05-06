@@ -15,7 +15,14 @@ const dbClient = new DynamoDBClient({ region: AWS_REGION });
 const TableName = process.env.TABLE_NAME;
 
 export async function save(event) {
-  const { id, userId, query, response, date } =  JSON.parse(event.Records[0].Sns.Message);
+    console.log('event', event);
+    console.log('Object.keys(event) ', Object.keys(event));
+
+
+    let {id, userId, query, response, date} = event; // for local testing
+    if(event.Records) {
+        let {id, userId, query, response, date} = JSON.parse(event.Records[0].Sns.Message);
+    }
 
   const newAnalysedDream = {
     id: { S: id },
@@ -24,6 +31,7 @@ export async function save(event) {
     response: { S: response },
     date: { S: date },
   };
+    console.log('newAnalysedDream: ', newAnalysedDream);
 
   //example new analysed dream
     // {
@@ -42,14 +50,14 @@ export async function save(event) {
   try {
     await dbClient.send(new PutItemCommand(params));
 
-    return{ statusCode: 200, newAnalysedDream };
+      return {statusCode: 200, newAnalysedDream};
   } catch (err) {
     console.log("Error: ", err);
 
-    return JSON.stringify({
-      body: { error: err.message },
-      input: event,
-    });
+      return JSON.stringify({
+          body: {error: err.message},
+          input: event,
+      });
   }
 }
 
