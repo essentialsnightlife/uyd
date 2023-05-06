@@ -36,6 +36,14 @@ provider:
 functions:
   save-analysed-dream:
     handler: src/domains/analysedDreams/functions/handler.save
+    url:
+      cors:
+        allowedOrigins:
+          - http://localhost:3000
+          - http://localhost:3001
+          - http://127.0.0.1:5173
+          - https://www.useyourdream.com
+          - https://uyd.vercel.app/
     events:
       - sns: AnsweredQueryTopic
 
@@ -100,19 +108,6 @@ resources:
                 Service: sns.amazonaws.com
               Action: sns:Publish
               Resource: "*"
-#    LambdaCors:
-#        Type: AWS::Lambda::Url
-#        Properties:
-#          TargetFunctionArn: !GetAtt uyd-dev-dream-analyser.Arn # Arn needs to reference function > save-analysed-dream
-#          AuthType: NONE
-#          Cors:
-#            AllowOrigins:
-#              allowedOrigins:
-#                - http://localhost:3000
-#                - http://localhost:3001
-#                - http://127.0.0.1:5173
-#                - https://www.useyourdream.com
-#                - https://uyd.vercel.app/
 
 custom:
   serverless-offline-sns:
