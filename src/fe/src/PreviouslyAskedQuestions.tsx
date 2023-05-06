@@ -9,6 +9,13 @@ interface PreviouslyAskedQuestionsProps {
   title: string;
 }
 
+function formatDate (dateStr: string)  {
+    const dateObj = new Date(dateStr);
+    const dayFirst3Letters = dateObj.toLocaleString('default', { weekday: 'long' }).substring(0, 3);
+    const date = dateStr.slice(0, 10) + ' ' + dateStr.slice(11, 16)
+    return dayFirst3Letters.toUpperCase() + ' ' + date;
+}
+
 export function PreviouslyAskedQuestions({
   previousAnsweredQuestions,
   title,
@@ -35,7 +42,7 @@ export function PreviouslyAskedQuestions({
         {previousAnsweredQuestions.map((question, i) => (
           <div key={i}>
             <p>
-              {String(question?.date).slice(0, 10)} {String(question?.date).slice(11, 16)}
+              {formatDate(String(question?.date))}
             </p>
             <p>Question: {question.query}</p>
             <p>Response: {question.response}</p>
