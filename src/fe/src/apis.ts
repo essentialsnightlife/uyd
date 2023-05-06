@@ -2,6 +2,10 @@ import { Session } from '@supabase/supabase-js';
 
 import { AnsweredQuery } from './types';
 
+function removeNonLetters(str: string) {
+  return str.replace(/^[^a-zA-Z]*/g, '');
+}
+
 export async function saveAnsweredQuery({
   session,
   query,
@@ -60,5 +64,5 @@ export async function analyseDream(query: string) {
     console.log(data.body);
     throw new Error(data.body.error);
   }
-  return data.body.result;
+  return removeNonLetters(data.body.result);
 }
