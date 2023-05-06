@@ -2,13 +2,11 @@ import {
     DynamoDBClient,
     PutItemCommand,
     PutItemCommandInput,
-    GetItemCommand,
-    GetItemCommandInput,
     ScanCommand,
     DeleteItemCommand,
-    DeleteItemCommandInput, BatchGetItemCommandInput, BatchGetItemCommand, ScanCommandInput,
+    DeleteItemCommandInput, ScanCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 import { AWS_REGION } from "../../../fe/src/constants";
 
 const dbClient = new DynamoDBClient({ region: AWS_REGION });
