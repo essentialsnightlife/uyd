@@ -16,22 +16,21 @@ export async function save(event) {
     console.log('event', event);
     console.log('Object.keys(event) ', Object.keys(event));
 
-
     let {id, userId, query, response, date} = event; // for local testing
     if(event.Records) {
         let {id, userId, query, response, date} = JSON.parse(event.Records[0].Sns.Message);
     }
 
-  const newAnalysedDream = {
-    id: { S: id },
-    userId: { S: userId },
-    query: { S: query },
-    response: { S: response },
-    date: { S: date },
-  };
+    const newAnalysedDream = {
+        id: { S: id },
+        userId: { S: userId },
+        query: { S: query },
+        response: { S: response },
+        date: { S: date },
+    };
     console.log('newAnalysedDream: ', newAnalysedDream);
 
-  //example new analysed dream
+    //example new analysed dream
     // {
     //   id: 'UYD1630546800000',
     //   userId: '612f1b0a1c9d5b006a0f1b9e',
@@ -40,31 +39,42 @@ export async function save(event) {
     //   date: '2021-09-01T00:00:00.000Z'
     // }
 
-  const params: PutItemCommandInput = {
-    TableName: TableName,
-    Item: newAnalysedDream,
-  };
+    const params: PutItemCommandInput = {
+        TableName: TableName,
+        Item: newAnalysedDream,
+    };
 
-  try {
-    await dbClient.send(new PutItemCommand(params));
+    try {
+        await dbClient.send(new PutItemCommand(params));
 
-      return {statusCode: 200, newAnalysedDream};
-  } catch (err) {
-    console.log("Error: ", err);
+        return {statusCode: 200, newAnalysedDream};
+    } catch (err) {
+        console.log("Error: ", err);
 
-      return JSON.stringify({
-          body: {error: err.message},
-          input: event,
-      });
-  }
+        return JSON.stringify({
+            body: {error: err.message},
+            input: event,
+        });
+    }
+}
+
+const formatterDDBScan = (data: {}) => {
+    const formattedData = {};
+    Object.keys(data).forEach(key => {
+        const value = data[key].S;
+        formattedData[key] = value;
+    });
+    return formattedData;
 }
 
 export async function getUserAnalysedDreams(event) {
+    const userId = event.pathParameters?.userId || event.body?.userId || ''
+
     const params: ScanCommandInput = {
         TableName: TableName,
         FilterExpression: "userId = :userId AND id <> :id",
         ExpressionAttributeValues: {
-            ":userId": {S: event.body.userId},
+            ":userId": {S: userId},
             ":id": {S: '0'},
         }
     }
@@ -73,8 +83,10 @@ export async function getUserAnalysedDreams(event) {
 
         const results = await dbClient.send(new ScanCommand(params));
         console.log(results);
+        const formattedResultItems = results.Items.map(item => formatterDDBScan(item));
+        console.log(formattedResultItems);
 
-        return {statusCode: 200, userId: event.body.userId, responses: results.Items };
+        return JSON.stringify({statusCode: 200, userId, responses: formattedResultItems });
     } catch (err) {
         console.log("Error: ", err);
 

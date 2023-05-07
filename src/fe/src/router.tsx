@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import LoginMagicLink from './LoginMagicLink';
-import UsersDreams from './UsersDreams';
+import ViewUsersAnalysedDreams from './ViewUsersAnalysedDreams';
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +20,6 @@ export const router = createBrowserRouter([
   },
   {
     path: '/users-dreams',
-    element: <UsersDreams />,
+    element: <ViewUsersAnalysedDreams />,
   },
 ]);

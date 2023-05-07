@@ -1,4 +1,4 @@
-export type AnsweredQuery = {
+export type AnalysedDream = {
     id: string;
     userId?: string;
     query: string;
