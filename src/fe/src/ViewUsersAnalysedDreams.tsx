@@ -35,10 +35,11 @@ function UsersAnalysedDreams() {
       return result;
     } catch (err) {
       console.log(err);
+      alert("Sorry, we couldn't get your dreams. Please refresh the page.");
     }
   };
 
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ['getUsersDreams'],
     queryFn: getUsersDreams,
   });
@@ -80,10 +81,6 @@ function UsersAnalysedDreams() {
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>{error}</div>;
   }
 
   return (
