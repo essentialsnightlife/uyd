@@ -10,8 +10,38 @@ import Layout from './Layout';
 import { formatDate } from './PreviouslyAskedQuestions';
 
 function ViewUsersAnalysedDreams() {
+  const queryClient = new QueryClient();
+
+  return (
+    // For caching
+    <QueryClientProvider client={queryClient}>
+      <UsersAnalysedDreams />
+    </QueryClientProvider>
+  );
+}
+
+function UsersAnalysedDreams() {
   const [session, setSession] = useState<Session | null>(null);
   const [analysedDreams, setAnalysedDreams] = useState<AnalysedDream[]>([]);
+
+  const getUsersDreams = async () => {
+    try {
+      const response = await fetch(
+        'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/' +
+          session?.user?.id || '',
+      );
+      const result = await response.json();
+      console.log('result', result);
+      return result;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const { isLoading, isError, data, error } = useQuery({
+    queryKey: ['getUsersDreams'],
+    queryFn: getUsersDreams,
+  });
 
   useEffect(() => {
     supabaseClient()
@@ -30,12 +60,8 @@ function ViewUsersAnalysedDreams() {
 
   useEffect(() => {
     const fetchAnalysedDreams = async () => {
-      const response = await fetch(
-        'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/' + 'user123',
-        // + session?.user?.id,
-      );
-      const data = await response.json();
-      return data.responses || [];
+      const responses = data?.responses;
+      return responses || [];
     };
 
     const sortedAnalysedDreams = (analysedDreams: AnalysedDream[]) =>
@@ -50,7 +76,15 @@ function ViewUsersAnalysedDreams() {
       console.log('data', data);
       setAnalysedDreams(sortedAnalysedDreams(data));
     });
-  }, []);
+  }, [data]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>{error}</div>;
+  }
 
   return (
     <Layout title="Your Dreams">
