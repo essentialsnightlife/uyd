@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
     element: <LoginMagicLink />,
   },
   {
-    path: '/users-dreams',
+    path: '/your-dreams',
     element: <ViewUsersAnalysedDreams />,
   },
 ]);

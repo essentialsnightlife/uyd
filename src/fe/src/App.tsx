@@ -111,7 +111,7 @@ function App() {
     return <LoginMagicLink />;
   }
   return (
-    <Layout>
+    <Layout title="Dream Analyser">
       <>
         <DreamAnalyser
           question={query}

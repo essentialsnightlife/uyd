@@ -7,13 +7,13 @@ import { ReactElement } from 'react';
 import Footer from './Footer';
 import Navbar from './Navbar';
 
-function Layout({ children }: { children: ReactElement }) {
+function Layout({ children, title }: { children: ReactElement; title: string }) {
   return (
     <Container maxWidth="sm">
       <Navbar />
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Dream Analyser
+          {title}
         </Typography>
         <Typography sx={{ mt: 1, mb: 3 }} color="text.secondary">
           ☁️ Start here | 🧠 Use your dreams

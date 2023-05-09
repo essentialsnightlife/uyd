@@ -53,7 +53,7 @@ function ViewUsersAnalysedDreams() {
   }, []);
 
   return (
-    <Layout>
+    <Layout title="Your Dreams">
       <>
         <Typography
           sx={{
@@ -71,8 +71,7 @@ function ViewUsersAnalysedDreams() {
                     sx={{
                       mb: 2,
                     }}
-                    variant="h6"
-                    component="h2"
+                    component="h5"
                     gutterBottom
                   >
                     {formatDate(analysedDream.date)}
@@ -89,7 +88,7 @@ function ViewUsersAnalysedDreams() {
                   </Typography>
                   <Typography
                     sx={{
-                      mb: 2,
+                      mb: 6,
                     }}
                     variant="h6"
                     component="h2"

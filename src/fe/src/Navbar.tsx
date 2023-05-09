@@ -10,15 +10,18 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { supabaseClient } from './auth/client';
 
-const pages = ['Guides', 'Analyser', 'Featured', 'Your History'];
+const pages = ['Your Dreams', 'Guides', 'Analyser', 'Featured'];
 const settings = ['Account', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  const navigate = useNavigate();
 
   const openNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -47,7 +50,9 @@ function ResponsiveAppBar() {
         console.log(error);
         alert('Error logging out, please try again');
       }
-    }
+    } else if (selection === 'YOUR DREAMS') {
+      navigate('/your-dreams');
+    } else console.log(selection);
   };
 
   return (
@@ -128,7 +133,10 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={closeNavMenu}
+                onClick={(e) => {
+                  handleClick(e);
+                  closeNavMenu;
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
