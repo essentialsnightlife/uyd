@@ -29,7 +29,7 @@ function LoginMagicLink() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <Layout>
+    <Layout title="">
       <>
         <Typography
           sx={{

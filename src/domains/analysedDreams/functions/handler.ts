@@ -1,31 +1,36 @@
 import {
-  DynamoDBClient,
-  PutItemCommand,
-  PutItemCommandInput,
-  GetItemCommand,
-  GetItemCommandInput,
-  ScanCommand,
-  DeleteItemCommand,
-  DeleteItemCommandInput,
+    DynamoDBClient,
+    PutItemCommand,
+    PutItemCommandInput,
+    ScanCommand,
+    DeleteItemCommand,
+    DeleteItemCommandInput, ScanCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 import { AWS_REGION } from "../../../fe/src/constants";
 
 const dbClient = new DynamoDBClient({ region: AWS_REGION });
 const TableName = process.env.TABLE_NAME;
 
 export async function save(event) {
-  const { id, userId, query, response, date } =  JSON.parse(event.Records[0].Sns.Message);
+    console.log('event', event);
+    console.log('Object.keys(event) ', Object.keys(event));
 
-  const newAnalysedDream = {
-    id: { S: id },
-    userId: { S: userId },
-    query: { S: query },
-    response: { S: response },
-    date: { S: date },
-  };
+    let {id, userId, query, response, date} = event; // for local testing
+    if(event.Records) {
+        let {id, userId, query, response, date} = JSON.parse(event.Records[0].Sns.Message);
+    }
 
-  //example new analysed dream
+    const newAnalysedDream = {
+        id: { S: id },
+        userId: { S: userId },
+        query: { S: query },
+        response: { S: response },
+        date: { S: date },
+    };
+    console.log('newAnalysedDream: ', newAnalysedDream);
+
+    //example new analysed dream
     // {
     //   id: 'UYD1630546800000',
     //   userId: '612f1b0a1c9d5b006a0f1b9e',
@@ -34,46 +39,64 @@ export async function save(event) {
     //   date: '2021-09-01T00:00:00.000Z'
     // }
 
-  const params: PutItemCommandInput = {
-    TableName: TableName,
-    Item: newAnalysedDream,
-  };
-
-  try {
-    await dbClient.send(new PutItemCommand(params));
-
-    return{ statusCode: 200, newAnalysedDream };
-  } catch (err) {
-    console.log("Error: ", err);
-
-    return JSON.stringify({
-      body: { error: err.message },
-      input: event,
-    });
-  }
-}
-export async function get(event) {
-  const params: GetItemCommandInput = {
-    TableName: TableName,
-    Key: marshall({
-      id: event.pathParameters.id,
-    }),
-  };
-
-  try {
-    const results = await dbClient.send(new GetItemCommand(params));
-    console.log(results);
-
-    return { statusCode: 200, body: JSON.stringify(unmarshall(results.Item)) };
-  } catch (err) {
-    console.log("Error: ", err);
-
-    return {
-      body: { error: err.message },
-      input: event,
+    const params: PutItemCommandInput = {
+        TableName: TableName,
+        Item: newAnalysedDream,
     };
-  }
+
+    try {
+        await dbClient.send(new PutItemCommand(params));
+
+        return {statusCode: 200, newAnalysedDream};
+    } catch (err) {
+        console.log("Error: ", err);
+
+        return JSON.stringify({
+            body: {error: err.message},
+            input: event,
+        });
+    }
 }
+
+const formatterDDBScan = (data: {}) => {
+    const formattedData = {};
+    Object.keys(data).forEach(key => {
+        const value = data[key].S;
+        formattedData[key] = value;
+    });
+    return formattedData;
+}
+
+export async function getUserAnalysedDreams(event) {
+    const userId = event.pathParameters?.userId || event.body?.userId || ''
+
+    const params: ScanCommandInput = {
+        TableName: TableName,
+        FilterExpression: "userId = :userId AND id <> :id",
+        ExpressionAttributeValues: {
+            ":userId": {S: userId},
+            ":id": {S: '0'},
+        }
+    }
+
+    try {
+
+        const results = await dbClient.send(new ScanCommand(params));
+        console.log(results);
+        const formattedResultItems = results.Items.map(item => formatterDDBScan(item));
+        console.log(formattedResultItems);
+
+        return JSON.stringify({statusCode: 200, userId, responses: formattedResultItems });
+    } catch (err) {
+        console.log("Error: ", err);
+
+        return {
+            body: {error: err.message},
+            input: event,
+        };
+    }
+}
+
 export async function list() {
   try {
     const data = await dbClient.send(new ScanCommand({ TableName: TableName }));
