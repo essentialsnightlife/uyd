@@ -6,7 +6,6 @@ import {
     DeleteItemCommand,
     DeleteItemCommandInput, ScanCommandInput,
 } from "@aws-sdk/client-dynamodb";
-import { marshall } from "@aws-sdk/util-dynamodb";
 import { AWS_REGION } from "../../../fe/src/constants";
 
 const dbClient = new DynamoDBClient({ region: AWS_REGION });
@@ -125,18 +124,18 @@ export async function del(event) {
   const idToBeDeleted = event.pathParameters.id;
   const params: DeleteItemCommandInput = {
     TableName: TableName,
-    Key:  marshall({ id: { S: idToBeDeleted } }),
+    Key:  { id: { S: idToBeDeleted } },
   };
 
   try {
     const results = await dbClient.send(new DeleteItemCommand(params));
 
-    return { statusCode: 200, body: JSON.stringify(results) };
+    return { statusCode: 200, deleted: idToBeDeleted,  body: JSON.stringify(results) };
 
   } catch (err) {
     console.log("Error: ", err);
     return {
-      body: { error: err.message },
+      error: err.message ,
     };
   }
 }
