@@ -28,9 +28,6 @@ export function DreamAnalyser({
           placeholder={placeholderText}
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          nonce={undefined}
-          onResize={undefined}
-          onResizeCapture={undefined}
         />
         <Button
           variant="text"
