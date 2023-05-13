@@ -8,6 +8,8 @@ export const DEFAULT_MODEL = 'text-davinci-003';
 // https://platform.openai.com/docs/models/overview
 export const DEFAULT_MAX_TOKENS = 250;
 
+export const DEFAULT_MAX_API_CALLS = 3;
+
 export const OPENAI_MODEL_CONFIG = {
   model: DEFAULT_MODEL,
   temperature: DEFAULT_TEMPERATURE,

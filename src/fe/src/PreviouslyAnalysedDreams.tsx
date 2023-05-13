@@ -2,24 +2,16 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-import { AnsweredQuery } from './types';
+import { AnalysedDream } from '../../domains/analysedDreams/types';
+import { formatDate, sortedAnalysedDreams } from './helpers';
 
 interface PreviouslyAskedQuestionsProps {
-  previousAnsweredQuestions: AnsweredQuery[];
+  previousAnalysedDreams: AnalysedDream[];
   title: string;
 }
 
-export function formatDate(dateStr: string) {
-  const dateObj = new Date(dateStr);
-  const dayFirst3Letters = dateObj
-    .toLocaleString('default', { weekday: 'long' })
-    .substring(0, 3);
-  const date = dateStr.slice(0, 10) + ' ' + dateStr.slice(11, 16);
-  return dayFirst3Letters.toUpperCase() + ' ' + date;
-}
-
-export function PreviouslyAskedQuestions({
-  previousAnsweredQuestions,
+export function PreviouslyAnalysedDreams({
+  previousAnalysedDreams,
   title,
 }: PreviouslyAskedQuestionsProps) {
   return (
@@ -41,7 +33,7 @@ export function PreviouslyAskedQuestions({
           textDecoration: 'none',
         }}
       >
-        {previousAnsweredQuestions.map((question, i) => (
+        {sortedAnalysedDreams(previousAnalysedDreams).map((question, i) => (
           <div key={i}>
             <p>{formatDate(String(question?.date))}</p>
             <p>Question: {question.query}</p>

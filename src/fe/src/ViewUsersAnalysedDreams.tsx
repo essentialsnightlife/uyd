@@ -8,8 +8,8 @@ import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 import { AnalysedDream } from '../../domains/analysedDreams/types';
 import { deleteDream, getUsersDreams } from './apis';
 import { supabaseClient } from './auth/client';
+import { formatDate, sortedAnalysedDreams } from './helpers';
 import Layout from './Layout';
-import { formatDate } from './PreviouslyAskedQuestions';
 
 function ViewUsersAnalysedDreams() {
   const queryClient = new QueryClient();
@@ -49,14 +49,6 @@ function UsersAnalysedDreams() {
       const responses = data?.responses;
       return responses || [];
     };
-
-    const sortedAnalysedDreams = (analysedDreams: AnalysedDream[]) =>
-      analysedDreams.sort((a, b) => {
-        if (!a.date || !b.date) {
-          return 0;
-        }
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      });
 
     fetchAnalysedDreams().then((analysedDreams) => {
       console.log('data', analysedDreams);

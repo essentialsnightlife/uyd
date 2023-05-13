@@ -1,8 +1,9 @@
-export async function analyseDream(query: string) {
-  function removeNonLetters(str: string) {
-    return str.replace(/^[^a-zA-Z]*/g, '');
-  }
+import { PublishCommand, PublishCommandInput, SNSClient } from '@aws-sdk/client-sns';
 
+import { AnalysedDream } from '../../domains/analysedDreams/types';
+import { removeNonLetters } from './helpers';
+
+export async function analyseDream(query: string) {
   let response;
   let data;
   try {
@@ -67,5 +68,43 @@ export async function deleteDream(dreamId: string) {
     console.log('Error deleting dream 🚨');
     console.log(err);
     throw new Error('Sorry, we could not delete your dream. Please try again. 🙏');
+  }
+}
+
+export async function publishAnalysedDream(analysedDream: AnalysedDream) {
+  const credentials = {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY || '',
+  };
+
+  let snsClient = new SNSClient({
+    region: 'eu-west-2',
+    credentials,
+  });
+  if (import.meta.env.DEV) {
+    snsClient = new SNSClient({
+      region: 'eu-west-2',
+      endpoint: 'http://localhost:4002',
+      credentials: {
+        accessKeyId: '',
+        secretAccessKey: 'e0xdF543BzuPdW04SRKnUXEeJ3YGHT271FWKvT8N',
+      },
+    });
+  }
+
+  const { id, userId, query, response, date } = analysedDream;
+
+  const input: PublishCommandInput = {
+    TopicArn: 'arn:aws:sns:eu-west-2:410317984454:AnsweredQueryTopic',
+    Message: JSON.stringify({ id, userId, query, response, date }),
+  };
+
+  try {
+    const command = new PublishCommand(input);
+    const snsResponse = await snsClient.send(command);
+    return { snsResponse };
+  } catch (err: unknown) {
+    console.log('Error: ', err);
+    console.log(err);
   }
 }
