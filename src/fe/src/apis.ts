@@ -21,13 +21,17 @@ export async function analyseDream(query: string) {
   } catch (err: unknown) {
     console.log('api error');
     console.log(err);
-    throw new Error('api error');
+    throw new Error(
+      'Sorry, there was an error trying to analyse your dream. Please try again. 🙏',
+    );
   }
 
   if (data.body.error) {
     console.log('data body error');
     console.log(data.body);
-    throw new Error(data.body.error);
+    throw new Error(
+      'Sorry, there was an error trying to analyse your dream. Please try again. 🙏',
+    );
   }
   return removeNonLetters(data.body.result);
 }
@@ -106,5 +110,6 @@ export async function publishAnalysedDream(analysedDream: AnalysedDream) {
   } catch (err: unknown) {
     console.log('Error: ', err);
     console.log(err);
+    throw new Error('Sorry, we could not save your dream. Please try again. 🙏');
   }
 }
