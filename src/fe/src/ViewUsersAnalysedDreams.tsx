@@ -6,32 +6,10 @@ import * as React from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 
 import { AnalysedDream } from '../../domains/analysedDreams/types';
+import { deleteDream, getUsersDreams } from './apis';
 import { supabaseClient } from './auth/client';
+import { formatDate, sortedAnalysedDreams } from './helpers';
 import Layout from './Layout';
-import { formatDate } from './PreviouslyAskedQuestions';
-
-async function handleDeleteDream(dreamId: string) {
-  try {
-    const response = await fetch(
-      'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/' + dreamId,
-      {
-        method: 'DELETE',
-      },
-    );
-    const result = await response.json();
-    if (result.error) {
-      console.log(result.error);
-      alert('Sorry, we could not delete your dream. Please try again.');
-      return;
-    }
-    console.log('result', result);
-    alert('Dream deleted! 👋');
-    return result;
-  } catch (err) {
-    console.log('Error deleting dream');
-    console.log(err);
-  }
-}
 
 function ViewUsersAnalysedDreams() {
   const queryClient = new QueryClient();
@@ -48,27 +26,6 @@ function UsersAnalysedDreams() {
   const [session, setSession] = useState<Session | null>(null);
   const [analysedDreams, setAnalysedDreams] = useState<AnalysedDream[]>([]);
 
-  const getUsersDreams = async () => {
-    try {
-      const response = await fetch(
-        'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/' +
-          // session?.user?.id ||
-          'user123',
-      );
-      const result = await response.json();
-      console.log('result', result);
-      return result;
-    } catch (err) {
-      console.log(err);
-      alert("Sorry, we couldn't get your dreams. Please refresh the page.");
-    }
-  };
-
-  const { isLoading, data } = useQuery({
-    queryKey: ['getUsersDreams'],
-    queryFn: getUsersDreams,
-  });
-
   useEffect(() => {
     supabaseClient()
       .auth.getSession()
@@ -84,23 +41,18 @@ function UsersAnalysedDreams() {
     return () => subscription.unsubscribe();
   });
 
+  const userId = session?.user?.id || '';
+  const { data, isLoading } = useQuery('usersDreams', () => getUsersDreams(userId));
+
   useEffect(() => {
     const fetchAnalysedDreams = async () => {
       const responses = data?.responses;
       return responses || [];
     };
 
-    const sortedAnalysedDreams = (analysedDreams: AnalysedDream[]) =>
-      analysedDreams!.sort((a, b) => {
-        if (!a.date || !b.date) {
-          return 0;
-        }
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      });
-
-    fetchAnalysedDreams().then((data) => {
-      console.log('data', data);
-      setAnalysedDreams(sortedAnalysedDreams(data));
+    fetchAnalysedDreams().then((analysedDreams) => {
+      console.log('data', analysedDreams);
+      setAnalysedDreams(sortedAnalysedDreams(analysedDreams));
     });
   }, [data]);
 
@@ -153,7 +105,7 @@ function UsersAnalysedDreams() {
                       const dreamId = analysedDream.id;
                       console.log('dreamId', dreamId);
                       if (confirm('Are you sure you want to delete this dream?')) {
-                        await handleDeleteDream(dreamId);
+                        await deleteDream(dreamId);
                         setAnalysedDreams(
                           analysedDreams.filter((dream) => dream.id !== analysedDream.id),
                         );
