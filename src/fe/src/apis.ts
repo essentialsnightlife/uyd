@@ -17,6 +17,7 @@ export async function analyseDream(query: string) {
     );
     data = await response.json();
     console.log('Analysing Dream - query: ', query);
+    console.log('Analysing Dream - response: ', response);
     console.log('Analysing Dream - data: ', data);
   } catch (err: unknown) {
     console.log('Analysing Dream - api error');
