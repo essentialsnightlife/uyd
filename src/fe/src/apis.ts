@@ -16,10 +16,10 @@ export async function analyseDream(query: string) {
       },
     );
     data = await response.json();
-    console.log('query: ', query);
-    console.log('data: ', data);
+    console.log('Analysing Dream - query: ', query);
+    console.log('Analysing Dream - data: ', data);
   } catch (err: unknown) {
-    console.log('api error');
+    console.log('Analysing Dream - api error');
     console.log(err);
     throw new Error(
       'Sorry, there was an error trying to analyse your dream. Please try again. 🙏',
@@ -27,7 +27,7 @@ export async function analyseDream(query: string) {
   }
 
   if (data.body.error) {
-    console.log('data body error');
+    console.log('Analysing Dream - data body');
     console.log(data.body);
     throw new Error(
       'Sorry, there was an error trying to analyse your dream. Please try again. 🙏',
@@ -43,10 +43,10 @@ export const getUsersDreams = async (id: string) => {
       // 'user123',
     );
     const result = await response.json();
-    console.log('result', result);
+    console.log('getUsersDreams - result: ', result);
     return result;
   } catch (err) {
-    console.log(err);
+    console.log('getUsersDreams - error: ', err);
     throw new Error(
       'Sorry, something went wrong. Please refresh the page and try again. 🙏',
     );
@@ -65,7 +65,7 @@ export async function deleteDream(dreamId: string) {
     if (result.error) {
       console.log(result.error);
     }
-    console.log('result', result);
+    console.log('Deleting Dream - result: ', result);
     alert('Dream deleted! 👋');
     return result;
   } catch (err) {
@@ -97,7 +97,7 @@ export async function publishAnalysedDream(analysedDream: AnalysedDream) {
   }
 
   const { id, userId, query, response, date } = analysedDream;
-
+  console.log('publishAnalysedDream - analysedDream obj: ', analysedDream);
   const input: PublishCommandInput = {
     TopicArn: 'arn:aws:sns:eu-west-2:410317984454:AnsweredQueryTopic',
     Message: JSON.stringify({ id, userId, query, response, date }),
@@ -108,7 +108,7 @@ export async function publishAnalysedDream(analysedDream: AnalysedDream) {
     const snsResponse = await snsClient.send(command);
     return { snsResponse };
   } catch (err: unknown) {
-    console.log('Error: ', err);
+    console.log('publishAnalysedDream - Error: ', err);
     console.log(err);
     throw new Error('Sorry, we could not save your dream. Please try again. 🙏');
   }
