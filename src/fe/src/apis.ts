@@ -91,7 +91,7 @@ export async function publishAnalysedDream(analysedDream: AnalysedDream) {
       endpoint: 'http://localhost:4002',
       credentials: {
         accessKeyId: '',
-        secretAccessKey: 'e0xdF543BzuPdW04SRKnUXEeJ3YGHT271FWKvT8N',
+        secretAccessKey: '',
       },
     });
   }

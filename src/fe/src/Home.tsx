@@ -83,6 +83,9 @@ function App() {
         });
         await publishAnalysedDream(analysedDream);
         setAnalysedDreams((prev) => [...prev, analysedDream]);
+        if (apiCallsLeft(analysedDreams, DEFAULT_MAX_API_CALLS) === 1) {
+          alert(`You have one more dream to analyse for today! 1️⃣`);
+        }
       } else {
         alert(
           `You have reached your limit of ${DEFAULT_MAX_API_CALLS} analysed dreams per day 🙈. Please try again tomorrow!`,
