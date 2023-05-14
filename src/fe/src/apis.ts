@@ -17,16 +17,16 @@ export async function analyseDream(query: string) {
     );
     data = await response.json();
     console.log('Analysing Dream - query: ', query);
-    console.log('Analysing Dream - response: ', response);
     console.log('Analysing Dream - data: ', data);
   } catch (err: unknown) {
     console.log('Analysing Dream - api error');
     console.log(err);
-    alert('Sorry, there was an error trying to analyse your dream. Please try again. 🙏');
-    throw new Error('Analysing Dream - api error');
+    throw new Error(
+      'Sorry, there was an error trying to analyse your dream. Please try again. 🙏',
+    );
   }
+
   if (data.body.error) {
-    alert('Sorry, there was an error trying to analyse your dream. Please try again. 🙏');
     console.log('Analysing Dream - data body');
     console.log(data.body);
     throw new Error(
@@ -37,7 +37,6 @@ export async function analyseDream(query: string) {
 }
 
 export const getUsersDreams = async (id: string) => {
-  console.log('getUsersDreams - id: ', id);
   try {
     const response = await fetch(
       'https://d3xxs9kqk8.execute-api.eu-west-2.amazonaws.com/dreams/' + id || '',
@@ -48,7 +47,6 @@ export const getUsersDreams = async (id: string) => {
     return result;
   } catch (err) {
     console.log('getUsersDreams - error: ', err);
-    alert('Sorry, something went wrong. Please refresh the page and try again. 🙏');
     throw new Error(
       'Sorry, something went wrong. Please refresh the page and try again. 🙏',
     );
@@ -73,7 +71,6 @@ export async function deleteDream(dreamId: string) {
   } catch (err) {
     console.log('Error deleting dream 🚨');
     console.log(err);
-    alert('Sorry, we could not delete your dream. Please try again. 🙏');
     throw new Error('Sorry, we could not delete your dream. Please try again. 🙏');
   }
 }
@@ -113,7 +110,6 @@ export async function publishAnalysedDream(analysedDream: AnalysedDream) {
   } catch (err: unknown) {
     console.log('publishAnalysedDream - Error: ', err);
     console.log(err);
-    alert('Sorry, we could not delete your dream. Please try again. 🙏');
     throw new Error('Sorry, we could not save your dream. Please try again. 🙏');
   }
 }
